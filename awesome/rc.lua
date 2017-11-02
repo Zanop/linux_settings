@@ -186,7 +186,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "Home", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -580,12 +580,16 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 autorun = true
 autorunApps = 
 { 
-   "xinput set-prop 11 287 1",
-   "xinput set-prop 12 287 1",
+  {"xinput set-prop 11 287 1","1"},
+  {"xinput set-prop 12 287 1", "1"},
+  {"firefox", "2"},
+  
 }
 if autorun then
    for app = 1, #autorunApps do
-       awful.util.spawn(autorunApps[app])
+       awful.spawn(autorunApps[app][1], {
+          tag = autorunApps[app][2],
+       })
    end
 end
 
