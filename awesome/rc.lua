@@ -10,6 +10,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
+local volume_control = require("volume-control")
+volumecfg = volume_control({})
 require("battery")
 require("awesome-wm-widgets.brightness-widget.brightness")
 
@@ -221,9 +223,9 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             wibox.widget.systray(),
-            -- brightness_widget,
             battery_widget,
             brightness_widget,
+            volumecfg,
             mytextclock,
             s.mylayoutbox,
         },
@@ -341,7 +343,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
     awful.key({ }, "#233", function () awful.spawn("light -A 5") end, {description = "increase brightness", group = "custom"}),
-    awful.key({ }, "#232", function () awful.spawn("light -U 5") end, {description = "decrease brightness", group = "custom"})
+    awful.key({ }, "#232", function () awful.spawn("light -U 5") end, {description = "decrease brightness", group = "custom"}),
+    awful.key({ }, "XF86AudioRaiseVolume", function() volumecfg:up() end),
+    awful.key({ }, "XF86AudioLowerVolume", function() volumecfg:down() end),
+    awful.key({ }, "XF86AudioMute",        function() volumecfg:toggle() end)
 )
 
 clientkeys = gears.table.join(
@@ -582,6 +587,8 @@ autorunApps =
 { 
   {"xinput set-prop 11 287 1","1"},
   {"xinput set-prop 12 287 1", "1"},
+  {"xinput set-prop 11 279 1", "1"},
+  {"nm-applet", "1"},
   {"firefox", "2"},
   
 }
