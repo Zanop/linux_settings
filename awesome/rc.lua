@@ -49,7 +49,7 @@ end
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm -bg black -fg lightgray -fa 'Monospace' -fs 11"
+terminal = "xterm -sl 10000 -bg black -fg lightgray -fa 'Monospace' -fs 11"
 editor = os.getenv("EDITOR") or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -65,7 +65,7 @@ awful.layout.layouts = {
     awful.layout.suit.tile,
     -- awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.top,
+    awful.layout.suit.tile.top,
     -- awful.layout.suit.fair,
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
@@ -225,7 +225,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.widget.systray(),
             battery_widget,
             brightness_widget,
-            volumecfg,
+        --    volumecfg,
             mytextclock,
             s.mylayoutbox,
         },
@@ -589,7 +589,7 @@ autorunApps =
   {"xinput set-prop 12 287 1", "1"},
   {"xinput set-prop 11 279 1", "1"},
   {"nm-applet", "1"},
-  {"firefox", "2"},
+--  {"firefox", "2"},
   
 }
 if autorun then

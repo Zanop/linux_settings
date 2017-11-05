@@ -7,16 +7,16 @@ local watch = require("awful.widget.watch")
 -- Battery 0: Discharging, 75%, 01:51:38 remaining
 -- Battery 0: Charging, 53%, 00:57:43 until charged
 
-local path_to_icons = "/usr/share/icons/Arc/status/symbolic/"
-local username = os.getenv("USER")
+local PATH_TO_ICONS = "/usr/share/icons/Arc/status/symbolic/"
+local USERNAME = os.getenv("USER")
 
-battery_widget = wibox.widget { 
+battery_widget = wibox.widget {
     {
         id = "icon",
-        widget = wibox.widget.imagebox, 
+        widget = wibox.widget.imagebox,
         resize = false
     },
-    layout = wibox.container.margin(brightness_icon, 0, 0, 3),
+    layout = wibox.container.margin(_, 0, 0, 3),
     set_image = function(self, path)
         self.icon.image = path
     end
@@ -29,19 +29,21 @@ watch(
         local _, status, charge_str, time = string.match(stdout, '(.+): (%a+), (%d?%d%d)%%,? ?.*')
         local charge = tonumber(charge_str)
         if (charge >= 0 and charge < 15) then
-            batteryType="battery-empty%s-symbolic"
-            show_battery_warning()
+	   batteryType="battery-empty%s-symbolic"
+	   if status ~= 'Charging' then
+	      show_battery_warning()
+	   end
         elseif (charge >= 15 and charge < 40) then batteryType="battery-caution%s-symbolic"
         elseif (charge >= 40 and charge < 60) then batteryType="battery-low%s-symbolic"
         elseif (charge >= 60 and charge < 80) then batteryType="battery-good%s-symbolic"
-        elseif (charge >= 80 and charge <= 95) then batteryType="battery-full%s-symbolic"
+        elseif (charge >= 80 and charge <= 100) then batteryType="battery-full%s-symbolic"
         end
         if status == 'Charging' then
             batteryType = string.format(batteryType,'-charging')
         else
             batteryType = string.format(batteryType,'')
         end
-        widget.image = path_to_icons .. batteryType .. ".svg"
+        widget.image = PATH_TO_ICONS .. batteryType .. ".svg"
 
         -- Update popup text
         -- TODO: Filter long lines
@@ -80,7 +82,7 @@ battery_widget:connect_signal("mouse::leave", function() naughty.destroy(notific
 --[[ Show warning notification ]]
 function show_battery_warning()
     naughty.notify{
-        icon = "/home/" .. username .. "/.config/awesome/nichosi.png",
+        icon = "/home/" .. USERNAME .. "/.config/awesome/nichosi.png",
         icon_size=100,
         text = "Huston, we have a problem",
         title = "Battery is dying",
